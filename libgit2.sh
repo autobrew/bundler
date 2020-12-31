@@ -4,5 +4,5 @@ source ~/.Renviron
 
 # Source API key and publish
 brew update
-deploy_all_bundles libgit2
-
+deploy_new_bundles libgit2
+deploy_old_bundles libgit2

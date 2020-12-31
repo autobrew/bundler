@@ -4,5 +4,6 @@ source ~/.Renviron
 
 # Source API key and publish
 brew update
-deploy_all_bundles openssl
+deploy_new_bundles openssl
+deploy_old_bundles "openssl@1.1"
 
