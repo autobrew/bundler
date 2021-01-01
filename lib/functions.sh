@@ -32,7 +32,7 @@ deploy_bundle() {
 
   # Create archive
   mv "$bundle/.brew" "$bundle/brew"
-  tar cfJ "$bundle.tar.xz" $bundle
+  tar cfJ "archive/$bundle.tar.xz" $bundle
   rm -Rf $bundle
 
   # Upload to bintray
@@ -42,7 +42,7 @@ deploy_bundle() {
     -d "${template/package/$package}" \
     "https://api.bintray.com/packages/autobrew/$target"
   curl --fail -u${BINTRAY_AUTH} \
-    -T "$bundle.tar.xz" \
+    -T "archive/$bundle.tar.xz" \
     "https://api.bintray.com/content/autobrew/$target/$package/$version/$bundle.tar.xz?publish=1&override=1"
 }
 
