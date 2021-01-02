@@ -23,7 +23,9 @@ deploy_bundle() {
   echo "Bundling bottles:\n$bottles"
 
   # Homebrew openssl@1.1 becomes just "openssl" in bintay
+  if [ -z "package" ]; then
   local package=$(echo $formula | cut -d'@' -f1)
+  fi
   local bundle="$package-$version-$target"
 
   # Download and extract bottles
