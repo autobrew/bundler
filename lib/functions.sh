@@ -4,7 +4,6 @@ set -e
 deploy_bundle() {
   local target=$1
   local formula=$2
-  local deps="${@:3}"
 
   if [ -z "$formula" ]; then
   echo "Please specify a formula, e.g: $0 apache-arrow-static"

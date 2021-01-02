@@ -6,5 +6,5 @@ source ~/.Renviron
 brew update
 
 # Use default cairo, except do not bundle the 'glib' dependency
-deploy_new_bundles cairo fontconfig freetype libpng lzo pixman
+deps="fontconfig freetype libpng lzo pixman" deploy_new_bundles cairo
 deploy_old_bundles cairo
