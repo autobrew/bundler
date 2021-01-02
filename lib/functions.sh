@@ -2,17 +2,26 @@
 set -e
 
 deploy_bundle() {
-  local formula=$1
-  local target=$2
+  local target=$1
+  local formula=$2
+  local deps="${@:3}"
 
-  if [ -z $formula ]; then
+  if [ -z "$formula" ]; then
   echo "Please specify a formula, e.g: $0 apache-arrow-static"
   exit 1
   fi
 
+  if [ -z "$deps" ]; then
+  local deps="$(brew deps $formula)"
+  fi
+
+  # Print debug
+  echo "Deploying $formula for $target with deps: $deps"
+
   # Lookup the bottles
   local version=$(brew info $formula --json=v1 | jq -r '.[0].versions.stable')
-  local bottles=$(brew info --json=v1 $(brew deps $formula) $formula | jq -r ".[].bottle.stable.files.$target.url")
+  local bottles=$(brew info --json=v1 $deps $formula | jq -r ".[].bottle.stable.files.$target.url")
+  echo "Bundling bottles:\n$bottles"
 
   # Homebrew openssl@1.1 becomes just "openssl" in bintay
   local package=$(echo $formula | cut -d'@' -f1)
@@ -44,15 +53,14 @@ deploy_bundle() {
   curl --fail -u${BINTRAY_AUTH} \
     -T "archive/$bundle.tar.xz" \
     "https://api.bintray.com/content/autobrew/$target/$package/$version/$bundle.tar.xz?publish=1&override=1"
+  echo "\nUpload OK: $bundle.tar.xz!"
 }
 
 deploy_new_bundles(){
-  local formula=$1
   local targets="arm64_big_sur big_sur catalina"
   for target in $targets
   do
-    echo "Deploying $formula for $target..."
-    deploy_bundle $formula $target
+    deploy_bundle $target "${@:1}"
   done
 }
 
@@ -70,11 +78,9 @@ setup_legacy(){
 
 deploy_old_bundles(){
   setup_legacy
-  local formula=$1
   local targets="high_sierra el_capitan"
   for target in $targets
   do
-    echo "Deploying $formula for $target..."
-    deploy_bundle $formula $target
+    deploy_bundle $target "${@:1}"
   done
 }
