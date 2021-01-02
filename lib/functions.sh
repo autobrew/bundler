@@ -33,8 +33,10 @@ deploy_bundle() {
   for url in $bottles
   do
     local file=$(basename $url)
+    local current=$(echo $file | cut -d'-' -f1)
+    local sharevar="${current}_extra_files"
     curl -sSL $url -o $file
-    tar xzf $file -C $bundle --strip 2 '**/include' '**/*.a' '*/*/.brew'
+    tar xzf $file -C $bundle --strip 2 '**/include' '**/*.a' '*/*/.brew' ${!sharevar}
     rm -f $file
     echo "OK! $file"
   done
