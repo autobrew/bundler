@@ -10,7 +10,7 @@ deploy_bundle() {
   exit 1
   fi
 
-  if [ -z "$deps" ]; then
+  if [ -z ${deps+set} ]; then
   local deps="$(brew deps $formula)"
   fi
 
@@ -36,7 +36,7 @@ deploy_bundle() {
   do
     local file=$(basename $url)
     local current=$(echo $file | cut -d'-' -f1)
-    local sharevar="${current}_extra_files"
+    local sharevar="${current//-/_}_extra_files"
     curl -sSL $url -o $file
     tar xzf $file -C $bundle --strip 2 '**/include' '**/*.a' '*/*/.brew' ${!sharevar}
     rm -f $file
