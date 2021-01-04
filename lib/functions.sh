@@ -38,7 +38,12 @@ deploy_bundle() {
     local current=$(echo $file | cut -d'-' -f1)
     local sharevar="${current//-/_}_extra_files"
     curl -sSL $url -o $file
-    tar xzf $file -C $bundle --strip 2 '**/include' '**/*.a' '*/*/.brew' ${!sharevar}
+    if tar -tf $file '*/*/.brew' >/dev/null; then
+      local brewvar='*/*/.brew'
+    else
+      unset brewvar && echo "NOTE: missing .brew in $file"
+    fi
+    tar xzf $file -C $bundle --strip 2 '**/include' '**/*.a' ${brewvar} ${!sharevar}
     rm -f $file
     echo "OK! $file"
   done
