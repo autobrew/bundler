@@ -49,7 +49,7 @@ deploy_bundle() {
   done
 
   # Create archive
-  mv "$bundle/.brew" "$bundle/brew"
+  mv "$bundle/.brew" "$bundle/brew" || true
   tar cfJ "archive/$bundle.tar.xz" $bundle
   rm -Rf $bundle
 
