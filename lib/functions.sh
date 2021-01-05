@@ -43,7 +43,11 @@ deploy_bundle() {
     else
       unset brewvar && echo "NOTE: missing .brew in $file"
     fi
-    tar xzf $file -C $bundle --strip 2 '**/include' '**/*.a' ${brewvar} ${!sharevar}
+    if [[ $current == "gnupg"* ]]; then
+      tar xzf $file -C $bundle --strip 2 ${brewvar} '**/bin/gpg1'
+    else
+      tar xzf $file -C $bundle --strip 2 '**/include' '**/*.a' ${brewvar} ${!sharevar}
+    fi
     rm -f $file
     echo "OK! $file"
   done
