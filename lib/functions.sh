@@ -56,6 +56,7 @@ deploy_bundle() {
   # Create archive
   mv "$bundle/.brew" "$bundle/brew" || true
   echo $deptree > $bundle/tree.txt
+  mkdir -p archive
   tar cfJ "archive/$bundle.tar.xz" $bundle
   rm -Rf $bundle
 
@@ -72,6 +73,7 @@ deploy_bundle() {
 }
 
 deploy_new_bundles(){
+  jq --version || brew install jq
   local targets="arm64_big_sur big_sur catalina"
   for target in $targets
   do
