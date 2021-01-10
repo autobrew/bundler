@@ -30,13 +30,21 @@ deploy_bundle() {
   echo "Creating bundle $bundle"
 
   # Download and extract bottles
+  set -f
   rm -Rf "$bundle" "$bundle.tar.xz"
   mkdir -p "$bundle"
   for url in $bottles
   do
     local file=$(basename $url)
     local current="${file%-*}"
+    local filesvar="${current//-/_}_files"
     local sharevar="${current//-/_}_extra_files"
+    local addfiles='**/include **/*.a'
+    if [ ${!filesvar} ]; then
+      local addfiles=${!filesvar}
+    fi
+
+    #local includevar="${current//-/_}_include_files"
     curl -sSL $url -o $file
     if tar -tf $file '*/*/.brew' >/dev/null; then
       local brewvar='*/*/.brew'
@@ -46,11 +54,12 @@ deploy_bundle() {
     if [[ $current == "gnupg"* ]]; then
       tar xzf $file -C $bundle --strip 2 ${brewvar} '**/bin/gpg1'
     else
-      tar xzf $file -C $bundle --strip 2 '**/include' '**/*.a' ${brewvar} ${!sharevar}
+      tar xzf $file -C $bundle --strip 2 ${addfiles} ${brewvar} ${!sharevar}
     fi
     rm -f $file
     echo "OK! $file"
   done
+  set +f
 
   # Copy custom files if any
   if [ -d "${package}-files" ]; then
