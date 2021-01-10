@@ -1,0 +1,57 @@
+#!/bin/sh
+BINDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+SELF=$(dirname $BINDIR)
+CONFIG_VERSION=3.2.0
+CONFIG_OGR_ENABLED=yes
+CONFIG_GNM_ENABLED=yes
+CONFIG_LIBS="-L${SELF}/lib -lgdal"
+CONFIG_DEP_LIBS="-lbz2 -ljson-c -lfreexl -lgeos_c -lgeos -lwebp -lodbc -lodbcinst -lltdl -lexpat -lpthread -lopenjp2 -lnetcdf -lhdf5_hl -lhdf5 -lsz -lgif -ljpeg -lgeotiff -lpng  -lpq -lpgport -lpgcommon -lssl -lcrypto -lldap -lzstd -llzma -lsqlite3 -lproj -lsqlite3 -ltiff -lz -lpthread -ldl -lspatialite -lrttopo -ldap -ldapserver -ldapclient -lpcre -lminizip -lcurl -lxml2 -liconv -lpthread $(krb5-config --libs) -framework CoreFoundation  -framework Security -framework OpenCL"
+CONFIG_CFLAGS="-I${SELF}/include"
+CONFIG_DATA="${SELF}/share/gdal"
+CONFIG_FORMATS="derived gtiff hfa mem vrt  aaigrid adrg aigrid airsar arg blx bmp bsb cals ceos ceos2 coasp cosar ctg dimap dted e00grid elas envisat ers esric fit gff gsg gxf hf2 idrisi ignfheightasciigrid ilwis ingr iris iso8211 jaxapalsar jdem kmlsuperoverlay l1b leveller map mrf msgn ngsgeoid nitf northwood pds prf r raw rmf rs2 safe saga sdts sentinel2 sgi sigdem srtmhgt terragen tga til tsx usgsdem xpm xyz zmap rik ozi eeda plmosaic rda wcs wms wmts daas ogcapi rasterlite mbtiles grib pdf webp dods openjpeg netcdf hdf5 gif jpeg png pcraster pcidsk postgisraster"
+if test $# -eq 0; then
+        usage 1 1>&2
+fi
+
+case $1 in
+  --libs)
+    echo $CONFIG_LIBS
+    ;;
+
+  --dep-libs)
+    echo $CONFIG_DEP_LIBS
+    ;;
+
+  --cflags)
+    echo $CONFIG_CFLAGS
+    ;;
+
+  --datadir)
+    echo $CONFIG_DATA
+    ;;
+
+  --prefix)
+    echo $CONFIG_PREFIX
+    ;;
+
+  --version)
+    echo $CONFIG_VERSION
+    ;;
+
+  --ogr-enabled)
+    echo yes
+    ;;
+
+  --gnm-enabled)
+    echo $CONFIG_GNM_ENABLED
+    ;;
+
+  --formats)
+    echo $CONFIG_FORMATS
+    ;;
+
+  *)
+    usage 1 1>&2
+    ;;
+
+esac

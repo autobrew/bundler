@@ -18,7 +18,6 @@ deploy_bundle() {
   echo "Deploying $formula for $target with deps: $deps"
 
   # Lookup the bottles
-  local deptree=$(brew deps --tree $formula)
   local version=$(brew info $formula --json=v1 | jq -r '.[0].versions.stable')
   local bottles=$(brew info --json=v1 $deps $formula | jq -r ".[].bottle.stable.files.$target.url")
   echo "Bundling bottles:\n$bottles"
@@ -36,7 +35,7 @@ deploy_bundle() {
   for url in $bottles
   do
     local file=$(basename $url)
-    local current=$(echo $file | cut -d'-' -f1)
+    local current="${file%-*}"
     local sharevar="${current//-/_}_extra_files"
     curl -sSL $url -o $file
     if tar -tf $file '*/*/.brew' >/dev/null; then
@@ -53,14 +52,19 @@ deploy_bundle() {
     echo "OK! $file"
   done
 
+  # Copy custom files if any
+  if [ -d "${package}-files" ]; then
+    cp -Rf ${package}-files/* $bundle/
+  fi
+
   # Create archive
   mv "$bundle/.brew" "$bundle/brew" || true
-  echo $deptree > $bundle/tree.txt
+  brew deps --tree $formula > $bundle/tree.txt
   mkdir -p archive
   tar cfJ "archive/$bundle.tar.xz" $bundle
   rm -Rf $bundle
 
-  # Upload to bintray
+  #Upload to bintray
   local template='{"name":"package","licenses":["Apache-2.0"],"vcs_url":"https://github.com/autobrew"}'
   curl -u${BINTRAY_AUTH} \
     -H "Content-Type: application/json" \
