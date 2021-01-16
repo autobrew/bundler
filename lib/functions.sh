@@ -114,3 +114,23 @@ deploy_old_bundles(){
     deploy_bundle $target "${@:1}"
   done
 }
+
+# Temporary solution to use devel branch for autobrew/core
+setup_legacy_sierra(){
+  local BREWDIR="$PWD/sierrabrew"
+  #export HOMEBREW_TEMP="$AUTOBREW/hbtmp"
+  if [ ! -f "$BREWDIR/bin/sierrabrew" ]; then
+    mkdir -p $BREWDIR
+    curl -fsSL https://github.com/autobrew/brew/tarball/master | tar xz --strip 1 -C $BREWDIR
+  fi
+  # Test installing a package
+  export PATH="$BREWDIR/bin:$PATH"
+  brew install --force-bottle pkg-config
+  (cd $(brew --repo homebrew/core); git pull origin devel; git log -n1)
+}
+
+deploy_sierra_bundle(){
+  setup_legacy_sierra
+  deploy_bundle "high_sierra" "${@:1}"
+}
+
