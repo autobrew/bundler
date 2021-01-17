@@ -18,6 +18,7 @@ deploy_bundle() {
   echo "Deploying $formula for $target with deps: $deps"
 
   # Lookup the bottles
+  local deptree=$(brew deps --tree $formula)
   local version=$(brew info $formula --json=v1 | jq -r '.[0].versions.stable')
   local bottles=$(brew info --json=v1 $deps $formula | jq -r ".[].bottle.stable.files.$target.url")
   echo "Bundling bottles:\n$bottles"
@@ -68,7 +69,8 @@ deploy_bundle() {
 
   # Create archive
   mv "$bundle/.brew" "$bundle/brew" || true
-  brew deps --tree $formula > $bundle/tree.txt
+  echo "$deptree" > $bundle/tree.txt
+  echo "$bottles" > $bundle/bottles.txt
   mkdir -p archive
   tar cfJ "archive/$bundle.tar.xz" $bundle
   rm -Rf $bundle
