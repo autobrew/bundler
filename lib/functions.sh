@@ -76,15 +76,20 @@ deploy_bundle() {
   rm -Rf $bundle
 
   #Upload to bintray
-  local template='{"name":"package","licenses":["Apache-2.0"],"vcs_url":"https://github.com/autobrew"}'
-  curl -u${BINTRAY_AUTH} \
-    -H "Content-Type: application/json" \
-    -d "${template/package/$package}" \
-    "https://api.bintray.com/packages/autobrew/$target"
-  curl --fail -u${BINTRAY_AUTH} \
-    -T "archive/$bundle.tar.xz" \
-    "https://api.bintray.com/content/autobrew/$target/$package/$version/$bundle.tar.xz?publish=1&override=1"
-  echo "\nUpload OK: $bundle.tar.xz!"
+  if [ -z "$DRYRUN" ];then
+    local template='{"name":"package","licenses":["Apache-2.0"],"vcs_url":"https://github.com/autobrew"}'
+    curl -u${BINTRAY_AUTH} \
+      -H "Content-Type: application/json" \
+      -d "${template/package/$package}" \
+      "https://api.bintray.com/packages/autobrew/$target"
+    curl --fail -u${BINTRAY_AUTH} \
+      -T "archive/$bundle.tar.xz" \
+      "https://api.bintray.com/content/autobrew/$target/$package/$version/$bundle.tar.xz?publish=1&override=1"
+    echo "\nUpload OK: $bundle.tar.xz!"
+    # curl --fail -u${JFROG_AUTH} \
+    #   -T "archive/$bundle.tar.xz" \
+    #   "https://autobrew.jfrog.io/artifactory/$target/$bundle.tar.xz?publish=1&overrideExistingFiles=1"
+  fi
 }
 
 deploy_new_bundles(){
