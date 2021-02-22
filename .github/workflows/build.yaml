@@ -1,0 +1,24 @@
+on:
+  push:
+  pull_request:
+
+name: Test creating bundles
+
+jobs:
+  Build:
+    runs-on: macOS-latest
+    name: macOS-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Create bundles
+        run: |
+          touch ~/.Renviron
+          for f in *.sh; do
+            echo "Processing $f formula..."
+            ./$f
+          done
+
+      - name: List all the things
+        run: ls -ltrR archive
