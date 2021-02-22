@@ -126,14 +126,13 @@ deploy_old_bundles(){
 setup_legacy_sierra(){
   local BREWDIR="$PWD/sierrabrew"
   #export HOMEBREW_TEMP="$AUTOBREW/hbtmp"
+  export PATH="$BREWDIR/bin:$PATH"
   if [ ! -f "$BREWDIR/bin/sierrabrew" ]; then
     mkdir -p $BREWDIR
     curl -fsSL https://github.com/autobrew/brew/tarball/master | tar xz --strip 1 -C $BREWDIR
+    brew install --force-bottle pkg-config
+    (cd $(brew --repo homebrew/core); git fetch origin devel:refs/remotes/origin/devel; git reset --hard origin/devel; git log -n1)
   fi
-  # Test installing a package
-  export PATH="$BREWDIR/bin:$PATH"
-  brew install --force-bottle pkg-config
-  (cd $(brew --repo homebrew/core); git pull origin devel; git log -n1)
 }
 
 deploy_sierra_bundle(){
