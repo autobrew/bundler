@@ -46,7 +46,7 @@ deploy_bundle() {
     fi
 
     #local includevar="${current//-/_}_include_files"
-    curl -sSL $url -o $file
+    curl -sSL --header "Authorization: Bearer QQ==" $url -o $file
     if tar -tf $file '*/*/.brew' >/dev/null; then
       local brewvar='*/*/.brew'
     else
