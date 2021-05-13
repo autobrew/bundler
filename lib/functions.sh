@@ -20,6 +20,12 @@ deploy_bundle() {
   # Lookup the bottles
   local deptree=$(brew deps --tree $formula)
   local version=$(brew info $formula --json=v1 | jq -r '.[0].versions.stable')
+  local revision=$(brew info $formula --json=v1 | jq -r '.[0].revision')
+  if [ "$revision" != "0" ]; then
+  version="${version}_$revision"
+  fi
+
+  # Find bottle URLs
   local bottles=$(brew info --json=v1 $deps $formula | jq -r ".[].bottle.stable.files.$target.url")
   echo "Bundling bottles:\n$bottles"
 
@@ -27,6 +33,7 @@ deploy_bundle() {
   if [ -z "$package" ]; then
   local package=$(echo $formula | cut -d'@' -f1)
   fi
+
   local bundle="$package-$version-$target"
   echo "Creating bundle $bundle"
 
