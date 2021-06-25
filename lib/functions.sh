@@ -46,8 +46,13 @@ deploy_bundle() {
   mkdir -p "$bundle"
   for url in $bottles
   do
-    local file=$(basename $url)
-    local current="${file%-*}"
+    if [[ $url == *"ghcr.io"* ]]; then
+      local current=$(basename $(dirname $(dirname $url)))
+      local file="${current}_${target}.tar.gz"
+    else
+      local file=$(basename $url)
+      local current="${file%-*}"
+    fi
     local filesvar="${current//-/_}_files"
     local sharevar="${current//-/_}_extra_files"
     local addfiles='**/include **/*.a'
