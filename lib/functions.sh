@@ -15,7 +15,7 @@ deploy_bundle() {
   fi
 
   # Print debug
-  echo "Deploying $formula for $target with deps: $deps"
+  echo "Bundling $formula for $target with deps: $deps"
 
   # Lookup the bottles
   local deptree=$(brew deps --tree $formula)
@@ -30,7 +30,7 @@ deploy_bundle() {
 
   # Find bottle URLs
   local bottles=$(brew info --json=v1 $deps $formula | jq -r ".[].bottle.stable.files.$target.url")
-  echo "Bundling bottles:\n$bottles"
+  echo "Found bottles:\n$bottles"
 
   # Homebrew openssl@1.1 becomes just "openssl" in bintay
   if [ -z "$package" ]; then

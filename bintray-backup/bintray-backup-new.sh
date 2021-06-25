@@ -1,6 +1,6 @@
 #!/bin/bash
-source lib/functions.sh
-setup_legacy
+source ../lib/functions.sh
+setup_legacy_sierra
 which brew
 brew --version
 
@@ -15,8 +15,8 @@ done
 alldeps=$(echo -e "${biglist// /\\n}" | sort -u)
 echo $alldeps
 
-# Get the bottle URLs
-bottles=$(brew info --json=v1 $alldeps | jq -r '.[].bottle.stable.files | .high_sierra.url, .el_capitan.url')
+# Get the bottle URL
+bottles=$(brew info --json=v1 $alldeps | jq -r '.[].bottle.stable.files.high_sierra.url //empty')
 
 # Download everything
 echo $bottles
