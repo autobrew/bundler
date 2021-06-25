@@ -24,6 +24,9 @@ deploy_bundle() {
   if [ "$revision" != "0" ]; then
   version="${version}_$revision"
   fi
+  if [ "$package" == "cranbundle" ]; then
+  version="$(date +'%Y%m%d')"
+  fi
 
   # Find bottle URLs
   local bottles=$(brew info --json=v1 $deps $formula | jq -r ".[].bottle.stable.files.$target.url")
@@ -53,7 +56,7 @@ deploy_bundle() {
     fi
 
     #local includevar="${current//-/_}_include_files"
-    curl -sSL --header "Authorization: Bearer QQ==" $url -o $file
+    curl -fsSL --header "Authorization: Bearer QQ==" $url -o $file
     if tar -tf $file '*/*/.brew' >/dev/null; then
       local brewvar='*/*/.brew'
     else
