@@ -16,8 +16,10 @@ jobs:
         run: |
           touch ~/.Renviron
           for f in *.sh; do
+            echo "::group::Testing $f"
             echo "Processing $f formula..."
             ./$f
+            echo "::endgroup::"
           done
 
       - name: List all the things
