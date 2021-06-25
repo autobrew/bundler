@@ -62,6 +62,10 @@ deploy_bundle() {
     else
       unset brewvar && echo "NOTE: missing .brew in $file"
     fi
+    # Shipping all pc files may overrule autobrew...
+    #if [ "$package" == "cranbundle" ] && tar -tf $file '**/*.pc' 2>/dev/null; then
+    #  brewvar='**/*.pc'
+    #fi
     if [[ $current == "gnupg"* ]]; then
       tar xzf $file -C $bundle --strip 2 ${brewvar} '**/bin/gpg1'
     else
