@@ -29,7 +29,7 @@ deploy_bundle() {
   fi
 
   # Find bottle URLs
-  local bottles=$(brew info --json=v1 $deps $formula | jq -r ".[].bottle.stable.files.$target.url")
+  local bottles=$(brew info --json=v1 $deps $formula | jq -r ".[] | .name + \";\" + .bottle.stable.files.$target.url")
   echo "Found bottles:\n$bottles"
 
   # Homebrew openssl@1.1 becomes just "openssl" in bintay
@@ -44,14 +44,14 @@ deploy_bundle() {
   set -f
   rm -Rf "$bundle" "$bundle.tar.xz"
   mkdir -p "$bundle"
-  for url in $bottles
+  for bottle in $bottles
   do
+    local current=$(echo "$bottle" | cut -d';' -f1)
+    local url=$(echo "$bottle" | cut -d';' -f2)
     if [[ $url == *"ghcr.io"* ]]; then
-      local current=$(basename $(dirname $(dirname $url)))
       local file="${current}_${target}.tar.gz"
     else
       local file=$(basename $url)
-      local current="${file%-*}"
     fi
     local filesvar="${current//-/_}_files"
     local sharevar="${current//-/_}_extra_files"
