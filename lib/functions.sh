@@ -86,6 +86,11 @@ deploy_bundle() {
     cp -Rf ${package}-files/* $bundle/
   fi
 
+  # Replaces homebrew paths with /usr/local
+  if [ "$package" == "cranbundle" ]; then
+    sed -i '' 's|@@HOMEBREW_.[A-Z]*@@/[^/"]*/[^/"]*|/usr/local|g' ${bundle}/bin/{gsl,h5,nc}*
+  fi
+
   # Create archive
   mv "$bundle/.brew" "$bundle/brew" || true
   echo "$deptree" > $bundle/tree.txt
