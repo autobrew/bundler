@@ -37,12 +37,12 @@ while test $# -gt 0; do
       echo ${prefix}
       ;;
     --version)
-      echo 3.9.0
+      echo 3.9.1
       ;;
     --libs)
       # TODO: make an alias for --clibs
       # see http://trac.osgeo.org/geos/ticket/497
-      echo -L${libdir} -lgeos-3.9.0
+      echo -L${libdir} -lgeos
       ;;
     --clibs)
       echo -L${libdir} -lgeos_c
