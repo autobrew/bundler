@@ -1,6 +1,5 @@
 #!/bin/sh
 source lib/functions.sh
-source ~/.Renviron
 
 export package="mariadb-connector-c"
 deploy_new_bundles mariadb-connector-c-static

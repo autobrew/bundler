@@ -7,26 +7,25 @@ name: Test creating bundles
 jobs:
   Build:
     runs-on: macOS-latest
-    name: macOS-latest
+    name: macOS-10.15
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Create bundles
-        run: |
-          touch ~/.Renviron
-          for f in *.sh; do
-            echo "::group::Testing $f"
-            echo "Processing $f formula..."
-            ./$f
-            echo "::endgroup::"
-          done
-
-      - name: List all the things
-        run: ls -ltrR archive
+      - name: Create CRAN bundle
+        run: ./cranbundle.sh
 
       - name: "Upload bundle archive"
         uses: actions/upload-artifact@v2
         with:
           name: archive
           path: archive
+
+      - name: Create bundles
+        run: |
+          for f in *.sh; do
+            echo "::group::Testing $f"
+            echo "Processing $f formula..."
+            ./$f || true
+            echo "::endgroup::"
+          done

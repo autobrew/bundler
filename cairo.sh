@@ -1,6 +1,5 @@
 #!/bin/sh
 source lib/functions.sh
-source ~/.Renviron
 
 # Prepare homebrew
 brew update
