@@ -28,8 +28,9 @@ jobs:
       - name: Create bundles
         run: |
           for f in *.sh; do
-            echo "::group::Testing $f"
-            echo "Processing $f formula..."
-            ./$f || echo "FAILED: $f"
+            STATUS="OK"
+            ./$f > /tmp/outlog 2>&1 || STATUS="FAILED"
+            echo "::group::Testing $f $STATUS"
+            cat /tmp/outlog
             echo "::endgroup::"
           done
