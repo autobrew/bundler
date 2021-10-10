@@ -91,6 +91,15 @@ deploy_bundle() {
     sed -i '' 's|@@HOMEBREW_.[A-Z]*@@/[^/"]*/[^/"]*|/usr/local|g' ${bundle}/bin/{gsl,h5,nc}*
   fi
 
+  # Run tests if running on appropriate machine
+  archtarget="$target-$(arch)"
+  if [ "$archtarget" = "high_sierra-i386" ] || [ "$archtarget" = "catalina-i386" ] || [ "$archtarget" = "arm64_big_sur-arm64" ]; then
+    if [ -f "$bundle/test" ]; then
+      echo "Running test script for $package on $archtarget"
+      "$bundle/test"
+    fi
+  fi
+
   # Create archive
   mv "$bundle/.brew" "$bundle/brew" || true
   echo "$deptree" > $bundle/tree.txt

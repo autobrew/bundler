@@ -1,0 +1,25 @@
+#!/bin/sh
+set -e
+
+# Test script
+cat << EOF > /tmp/test-gdal.cpp
+#include "gdal_priv.h"
+#include "cpl_conv.h" // for CPLMalloc()
+#include <iostream>
+using namespace std;
+
+int main(){
+    GDALDataset  *poDataset;
+    GDALAllRegister();
+    cout << "GDAL test success";
+    return 0;
+}
+EOF
+
+# Run linker test
+source "${BASH_SOURCE%/*}/setvars.sh"
+libs="$(gdal-config --libs) $(gdal-config --dep-libs)"
+echo "Trying to link with $libs"
+clang++ -std=c++11 /tmp/test-gdal.cpp -o test-gdal $(gdal-config --cflags) $libs
+./test-gdal
+rm /tmp/test-gdal.cpp test-gdal
