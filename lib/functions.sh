@@ -92,11 +92,12 @@ deploy_bundle() {
   fi
 
   # Run tests if running on appropriate machine
-  archtarget="$target-$(arch)"
-  if [ "$archtarget" = "high_sierra-i386" ] || [ "$archtarget" = "catalina-i386" ] || [ "$archtarget" = "arm64_big_sur-arm64" ]; then
-    if [ -f "$bundle/test" ]; then
-      echo "Running test script for $package on $archtarget"
-      "$bundle/test"
+  if [ -f "$bundle/test" ]; then
+    if [[ "$target" == "arm64"* ]] && [[ ${OSTYPE:6} -lt 20 ]]; then
+      echo "Skipping tests (testing arm64 requires MacOS 11)"
+    else
+      echo "Running test script for $package on $target"
+      "$bundle/test" "$target"
     fi
   fi
 

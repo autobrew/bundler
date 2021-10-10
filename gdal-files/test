@@ -16,10 +16,22 @@ int main(){
 }
 EOF
 
+if [[ "$1" == "arm64"* ]]; then
+  arch="arm64"
+else
+  arch="x86_64"
+fi
+
 # Run linker test
 source "${BASH_SOURCE%/*}/setvars.sh"
 libs="$(gdal-config --libs) $(gdal-config --dep-libs)"
 echo "Trying to link with $libs"
-clang++ -std=c++11 /tmp/test-gdal.cpp -o test-gdal $(gdal-config --cflags) $libs
+clang++ -arch $arch -std=c++11 /tmp/test-gdal.cpp -o test-gdal $(gdal-config --cflags) $libs
+
+# Actually run the program if possible
+if [ "$arch" = "$(uname -m)" ]; then
 ./test-gdal
+else
+echo "Linking OK, skipping run test for $arch on $(uname -m)"
+fi
 rm /tmp/test-gdal.cpp test-gdal

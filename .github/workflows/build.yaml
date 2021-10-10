@@ -6,8 +6,12 @@ name: Test creating bundles
 
 jobs:
   Build:
-    runs-on: macOS-latest
-    name: macOS-10.15
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ macos-10.15, macos-11 ]
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -26,6 +30,6 @@ jobs:
           for f in *.sh; do
             echo "::group::Testing $f"
             echo "Processing $f formula..."
-            ./$f || true
+            ./$f || echo "FAILED: $f"
             echo "::endgroup::"
           done
