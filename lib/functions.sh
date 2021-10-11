@@ -47,8 +47,8 @@ deploy_bundle() {
   for bottle in $bottles
   do
     local current=$(echo "$bottle" | cut -d';' -f1)
-    if [ "$current" = "ca-certificates" ]; then
-      # This is now a dependency of openssl
+    if [ "$current" = "ca-certificates" ] || [ "$current" = "m4" ]; then
+      # Upstream dependencies of openssl and libtool
       continue
     fi
     local url=$(echo "$bottle" | cut -d';' -f2)
