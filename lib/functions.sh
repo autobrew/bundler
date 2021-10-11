@@ -47,6 +47,10 @@ deploy_bundle() {
   for bottle in $bottles
   do
     local current=$(echo "$bottle" | cut -d';' -f1)
+    if [ "$current" = "ca-certificates" ]; then
+      # This is now a dependency of openssl
+      continue
+    fi
     local url=$(echo "$bottle" | cut -d';' -f2)
     if [[ $url == *"ghcr.io"* ]]; then
       local file="${current}_${target}.tar.gz"
