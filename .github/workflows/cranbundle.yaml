@@ -1,0 +1,21 @@
+on:
+  push:
+  pull_request:
+
+name: Create and upload CRAN bundles
+
+jobs:
+  Build:
+    runs-on: macos-10.15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Create CRAN bundle
+        run: ./cranbundle.sh
+
+      - name: "Upload bundle archive"
+        uses: actions/upload-artifact@v2
+        with:
+          name: archive
+          path: archive

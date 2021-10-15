@@ -16,15 +16,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Create CRAN bundle
-        run: ./cranbundle.sh
-
-      - name: "Upload bundle archive"
-        uses: actions/upload-artifact@v2
-        with:
-          name: archive
-          path: archive
-
       - name: Create bundles
         run: |
           for f in *.sh; do
