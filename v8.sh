@@ -5,5 +5,5 @@ source lib/functions.sh
 brew update
 brew tap autobrew/cran
 export package="v8"
+export deps=""
 deploy_new_bundles v8-static
-deploy_old_bundles v8
