@@ -78,7 +78,7 @@ deploy_bundle() {
     if [[ $current == "gnupg"* ]]; then
       tar xzf $file -C $bundle --strip 2 ${brewvar} '**/bin/gpg1'
     else
-      tar xzf $file -C $bundle --strip 2 ${addfiles} ${brewvar} ${!sharevar}
+      tar xzf $file -C $bundle --strip 2 ${addfiles} ${brewvar} ${!sharevar} || (echo "Failure extracting $file" && exit 1)
     fi
     rm -f $file
     echo "OK! $file"
@@ -112,25 +112,11 @@ deploy_bundle() {
   mkdir -p "archive/$target"
   tar cfJ "archive/$target/$bundle.tar.xz" $bundle
   rm -Rf $bundle
-
-  #Upload to bintray
-  #if [ -z "$DRYRUN" ];then
-  #  local template='{"name":"package","licenses":["Apache-2.0"],"vcs_url":"https://github.com/autobrew"}'
-  #  curl -u${BINTRAY_AUTH} \
-  #    -H "Content-Type: application/json" \
-  #    -d "${template/package/$package}" \
-  #    "https://api.bintray.com/packages/autobrew/$target"
-  #  curl --fail -u${BINTRAY_AUTH} \
-  #    -T "archive/$target/$bundle.tar.xz" \
-  #    "https://api.bintray.com/content/autobrew/$target/$package/$version/$bundle.tar.xz?publish=1&override=1"
-  #  echo "\nUpload OK: $bundle.tar.xz!"
-    # curl --fail -u${JFROG_AUTH} \
-    #   -T "archive/$target/$bundle.tar.xz" \
-    #   "https://autobrew.jfrog.io/artifactory/$target/$bundle.tar.xz?publish=1&overrideExistingFiles=1"
-  #fi
 }
 
 deploy_new_bundles(){
+  brew update
+  brew tap autobrew/cran
   jq --version || brew install jq
   local targets="arm64_big_sur big_sur catalina"
   for target in $targets
@@ -139,7 +125,7 @@ deploy_new_bundles(){
   done
 }
 
-setup_legacy(){
+deploy_old_bundles(){
   local BREWDIR="$PWD/autobrew"
   #export HOMEBREW_TEMP="$AUTOBREW/hbtmp"
   if [ ! -f "$BREWDIR/bin/brew" ]; then
@@ -147,34 +133,6 @@ setup_legacy(){
     curl -fsSL https://github.com/autobrew/brew/tarball/master | tar xz --strip 1 -C $BREWDIR
   fi
   # Test installing a package
-  export PATH="$BREWDIR/bin:$PATH"
-  brew install --force-bottle pkg-config
+  PATH="$BREWDIR/bin:$PATH" brew install --force-bottle pkg-config
+  PATH="$BREWDIR/bin:$PATH" deploy_bundle "high_sierra" "${@:1}"
 }
-
-deploy_old_bundles(){
-  setup_legacy
-  local targets="high_sierra el_capitan"
-  for target in $targets
-  do
-    deploy_bundle $target "${@:1}"
-  done
-}
-
-# Temporary solution to use devel branch for autobrew/core
-setup_legacy_sierra(){
-  local BREWDIR="$PWD/sierrabrew"
-  #export HOMEBREW_TEMP="$AUTOBREW/hbtmp"
-  export PATH="$BREWDIR/bin:$PATH"
-  if [ ! -f "$BREWDIR/bin/sierrabrew" ]; then
-    mkdir -p $BREWDIR
-    curl -fsSL https://github.com/autobrew/brew/tarball/master | tar xz --strip 1 -C $BREWDIR
-    brew install --force-bottle pkg-config
-    (cd $(brew --repo homebrew/core); git fetch origin devel:refs/remotes/origin/devel; git reset --hard origin/devel; git log -n1)
-  fi
-}
-
-deploy_sierra_bundle(){
-  setup_legacy_sierra
-  deploy_bundle "high_sierra" "${@:1}"
-}
-
