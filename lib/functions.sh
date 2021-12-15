@@ -4,7 +4,6 @@ set -e
 deploy_bundle() {
   local target=$1
   local formula=$2
-
   if [ -z "$formula" ]; then
   echo "Please specify a formula, e.g: $0 apache-arrow-static"
   exit 1
@@ -127,12 +126,11 @@ deploy_new_bundles(){
 
 deploy_old_bundles(){
   local BREWDIR="$PWD/autobrew"
-  #export HOMEBREW_TEMP="$AUTOBREW/hbtmp"
+  local PATH="$BREWDIR/bin:$PATH"
   if [ ! -f "$BREWDIR/bin/brew" ]; then
     mkdir -p $BREWDIR
     curl -fsSL https://github.com/autobrew/brew/tarball/master | tar xz --strip 1 -C $BREWDIR
+    brew install --force-bottle pkg-config
   fi
-  # Test installing a package
-  PATH="$BREWDIR/bin:$PATH" brew install --force-bottle pkg-config
-  PATH="$BREWDIR/bin:$PATH" deploy_bundle "high_sierra" "${@:1}"
+  deploy_bundle "high_sierra" "${@:1}"
 }

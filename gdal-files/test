@@ -11,7 +11,7 @@ using namespace std;
 int main(){
     GDALDataset  *poDataset;
     GDALAllRegister();
-    cout << "GDAL test success";
+    cout << " == GDAL test success ==\n";
     return 0;
 }
 EOF
@@ -30,6 +30,7 @@ clang++ -arch $arch -std=c++11 /tmp/test-gdal.cpp -o test-gdal $(gdal-config --c
 
 # Actually run the program if possible
 if [ "$arch" = "$(uname -m)" ]; then
+echo "Running test program..."
 ./test-gdal
 else
 echo "Linking OK, skipping run test for $arch on $(uname -m)"
