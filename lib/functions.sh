@@ -134,3 +134,15 @@ deploy_old_bundles(){
   fi
   deploy_bundle "high_sierra" "${@:1}"
 }
+
+deploy_oldold_bundles(){
+  local BREWDIR="$PWD/capitanbrew"
+  local PATH="$BREWDIR/bin:$PATH"
+  if [ ! -f "$BREWDIR/bin/brew" ]; then
+    mkdir -p $BREWDIR
+    curl -fsSL https://github.com/autobrew/brew/tarball/master | tar xz --strip 1 -C $BREWDIR
+    brew install --force-bottle pkg-config
+    (cd $(brew --repo homebrew/core); git fetch origin el-capitan:refs/remotes/origin/el-capitan; git reset --hard origin/el-capitan; git log -n1)
+  fi
+  deploy_bundle "el_capitan" "${@:1}"
+}
