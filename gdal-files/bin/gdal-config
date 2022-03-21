@@ -1,7 +1,7 @@
 #!/bin/sh
 BINDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 SELF=$(dirname $BINDIR)
-CONFIG_VERSION=3.3.2
+CONFIG_VERSION=3.4.2
 CONFIG_OGR_ENABLED=yes
 CONFIG_GNM_ENABLED=yes
 CONFIG_LIBS="-L${SELF}/lib -lgdal"
