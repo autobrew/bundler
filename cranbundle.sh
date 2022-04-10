@@ -16,3 +16,4 @@ export libpng_extra_files="*/*/bin/*-config"
 export deps="cmake fftw mpfr pcre2 protobuf gmp gsl glpk pkg-config minizip2 szip bzip2 librttopo openssl@1.1 geos udunits json-c freexl webp unixodbc expat openjpeg netcdf hdf4 hdf5 giflib jpeg libgeotiff libpng libpq zstd xz libspatialite sqlite proj libtiff libtool libdap pcre"
 deploy_old_bundles gdal
 deploy_new_bundles gdal-lite
+merge_fat_bundles cranbundle

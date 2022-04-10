@@ -146,3 +146,29 @@ deploy_oldold_bundles(){
   fi
   deploy_bundle "el_capitan" "${@:1}"
 }
+
+merge_fat_bundles(){
+  local formula=$1
+  local target="big_sur"
+  local file1=$(echo archive/$target/$formula*)
+  local file2="${file1//$target/arm64_$target}"
+  local file3="${file1//$target/fat_$target}"
+  #local bundle="$(basename ${file1%%.*})"
+  rm -Rf tmp
+  mkdir -p tmp
+  tar xzf $file1 -C tmp
+  local bundle=$(ls tmp)
+  tar xzf $file2 -C tmp
+  for input1 in tmp/$bundle/lib/*.a; do
+    local input2="${input1/$target/arm64_$target}"
+    lipo -create $input1 $input2 -output libfat.a
+    mv -fv libfat.a $input1
+  done
+  cat tmp/${bundle/$target/arm64_$target}/bottles.txt >> tmp/$bundle/bottles.txt
+  rm -Rf tmp/*-arm64_big_sur
+  local fatbundle=${bundle/$target/fat_$target}
+  mv tmp/$bundle tmp/$fatbundle
+  mkdir -p $(dirname $file3)
+  (cd tmp; tar cfJ ../$file3 $fatbundle)
+  rm -Rf tmp
+}
