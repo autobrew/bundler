@@ -149,24 +149,26 @@ deploy_oldold_bundles(){
 
 merge_fat_bundles(){
   local formula=$1
-  local target="big_sur"
-  local file1=$(echo archive/$target/$formula*)
-  local file2="${file1//$target/arm64_$target}"
-  local file3="${file1//$target/fat_$target}"
+  local input1="catalina"
+  local input2="arm64_big_sur"
+  local output="fat_big_sur"
+  local file1=$(echo archive/$input1/$formula*)
+  local file2="${file1//$input1/$input2}"
+  local file3="${file1//$input1/$output}"
   #local bundle="$(basename ${file1%%.*})"
   rm -Rf tmp
   mkdir -p tmp
   tar xzf $file1 -C tmp
   local bundle=$(ls tmp)
   tar xzf $file2 -C tmp
-  for input1 in tmp/$bundle/lib/*.a; do
-    local input2="${input1/$target/arm64_$target}"
-    lipo -create $input1 $input2 -output libfat.a
-    mv -fv libfat.a $input1
+  for statlib1 in tmp/$bundle/lib/*.a; do
+    local statlib2="${statlib1/$input1/$input2}"
+    lipo -create $statlib1 $statlib2 -output fatlib.a
+    mv -fv fatlib.a $statlib1
   done
-  cat tmp/${bundle/$target/arm64_$target}/bottles.txt >> tmp/$bundle/bottles.txt
-  rm -Rf tmp/*-arm64_big_sur
-  local fatbundle=${bundle/$target/fat_$target}
+  cat tmp/${bundle/$input1/$input2}/bottles.txt >> tmp/$bundle/bottles.txt
+  rm -Rf tmp/*-arm64*
+  local fatbundle=${bundle/$input1/$output}
   mv tmp/$bundle tmp/$fatbundle
   mkdir -p $(dirname $file3)
   (cd tmp; tar cfJ ../$file3 $fatbundle)
