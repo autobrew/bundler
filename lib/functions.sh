@@ -79,6 +79,11 @@ deploy_bundle() {
     else
       tar xzf $file -C $bundle --strip 2 ${addfiles} ${brewvar} ${!sharevar} || (echo "Failure extracting $file" && exit 1)
     fi
+
+    # Workaround for huge data in proj9
+    if [ $current = "proj" ]; then
+      find $bundle/share/proj -name "*.tif" -type f -delete
+    fi
     rm -f $file
     echo "OK! $file"
   done
