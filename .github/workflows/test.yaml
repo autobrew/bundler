@@ -1,6 +1,12 @@
 on:
-  push:
-  pull_request:
+  workflow_dispatch:
+    inputs:
+      library:
+        description: 'Which library to bundle'
+        required: false
+      save:
+        description: 'Save artifacts'
+        required: false
 
 name: Test creating bundles
 
@@ -18,10 +24,20 @@ jobs:
 
       - name: Create bundles
         run: |
-          for f in *.sh; do
-            STATUS="OK"
-            ./$f > /tmp/outlog 2>&1 || STATUS="FAILED"
-            echo "::group::Testing $f $STATUS"
-            cat /tmp/outlog
-            echo "::endgroup::"
-          done
+          if [ "${{ github.event.inputs.library }}" ]; then
+            ./${{ github.event.inputs.library }}.sh
+          else
+            for f in *.sh; do
+              STATUS="OK"
+              ./$f > /tmp/outlog 2>&1 || STATUS="FAILED"
+              echo "::group::Testing $f $STATUS"
+              cat /tmp/outlog
+              echo "::endgroup::"
+            done
+          fi
+
+      - uses: actions/upload-artifact@v3
+        if: ${{ github.event.inputs.save }}
+        with:
+          name: archive
+          path: archive/*/*.xz
