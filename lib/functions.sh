@@ -94,9 +94,21 @@ deploy_bundle() {
     cp -Rf ${package}-files/* $bundle/
   fi
 
-  # Replaces homebrew paths with /usr/local
+  # Patch a bunch of .pc files
   if [ "$package" == "cranbundle" ]; then
+    sed -i '' 's|^prefix=.*|prefix=${pcfiledir}/../..|g' ${bundle}/lib/pkgconfig/*.pc
+    sed -i '' 's|@@HOMEBREW_PREFIX@@|${prefix}|g' ${bundle}/lib/pkgconfig/*.pc
+    sed -i '' 's|@@HOMEBREW_.[A-Z]*@@/[^/"]*/[^/"]*|${prefix}|g' ${bundle}/lib/pkgconfig/*.pc
     sed -i '' 's|@@HOMEBREW_.[A-Z]*@@/[^/"]*/[^/"]*|/usr/local|g' ${bundle}/bin/{gsl,h5,nc}*
+    sed -i '' 's|/opt/freetype||g' ${bundle}/lib/pkgconfig/freetype2.pc
+    sed -i '' 's|Libs.private:|Libs.private: -framework CoreFoundation -framework CoreGraphics|' ${bundle}/lib/pkgconfig/cairo.pc
+
+  fi
+
+  # Copy MacOS system pc files
+  if [ "$package" == "cranbundle" ]; then
+    # TODO: maybe version this by $target instead of hardcoding 10.13
+    cp -v /usr/local/Homebrew/Library/Homebrew/os/mac/pkgconfig/10.13/* ${bundle}/lib/pkgconfig
   fi
 
   # Run tests if running on appropriate machine
