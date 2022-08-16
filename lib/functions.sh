@@ -126,8 +126,23 @@ deploy_bundle() {
   echo "$deptree" > $bundle/tree.txt
   echo "$bottles" > $bundle/bottles.txt
   mkdir -p "archive/$target"
-  tar cfJ "archive/$target/$bundle.tar.xz" $bundle
+  if [ "$target" = "x86_64_linux" ]; then
+    tar cfz "archive/$target/$bundle.tar.gz" $bundle
+  else
+    tar cfJ "archive/$target/$bundle.tar.xz" $bundle
+  fi
   rm -Rf $bundle
+}
+
+deploy_linux_bundles(){
+  brew update
+  brew tap autobrew/cran
+  jq --version || brew install jq
+  local targets="x86_64_linux"
+  for target in $targets
+  do
+    deploy_bundle $target "${@:1}"
+  done
 }
 
 deploy_new_bundles(){
