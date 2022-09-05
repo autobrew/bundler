@@ -127,7 +127,7 @@ deploy_bundle() {
   echo "$bottles" > $bundle/bottles.txt
   mkdir -p "archive/$target"
   if [ "$target" = "x86_64_linux" ]; then
-    tar cfz "archive/$target/$bundle.tar.gz" $bundle
+    gtar cfz "archive/$target/$bundle.tar.gz" $bundle
   else
     tar cfJ "archive/$target/$bundle.tar.xz" $bundle
   fi
@@ -137,7 +137,7 @@ deploy_bundle() {
 deploy_linux_bundles(){
   brew update
   brew tap autobrew/cran
-  jq --version || brew install jq
+  jq --version || brew install jq gnu-tar
   local targets="x86_64_linux"
   for target in $targets
   do
@@ -149,7 +149,7 @@ deploy_new_bundles(){
   brew update
   brew tap autobrew/cran
   jq --version || brew install jq
-  local targets="arm64_big_sur big_sur catalina"
+  local targets="arm64_big_sur big_sur"
   for target in $targets
   do
     deploy_bundle $target "${@:1}"
