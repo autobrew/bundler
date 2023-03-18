@@ -96,9 +96,10 @@ deploy_bundle() {
 
   # Patch a bunch of .pc files
   if [ "$package" == "cranbundle" ]; then
-    sed -i '' 's|^prefix=.*|prefix=${pcfiledir}/../..|g' ${bundle}/lib/pkgconfig/*.pc
-    sed -i '' 's|@@HOMEBREW_PREFIX@@|${prefix}|g' ${bundle}/lib/pkgconfig/*.pc
-    sed -i '' 's|@@HOMEBREW_.[A-Z]*@@/[^/"]*/[^/"]*|${prefix}|g' ${bundle}/lib/pkgconfig/*.pc
+    local pcfiles=$(find "${bundle}/lib/pkgconfig" -maxdepth 1 -name "*.pc" -type f)
+    sed -i '' 's|^prefix=.*|prefix=${pcfiledir}/../..|g' $pcfiles
+    sed -i '' 's|@@HOMEBREW_PREFIX@@|${prefix}|g' $pcfiles
+    sed -i '' 's|@@HOMEBREW_.[A-Z]*@@/[^/"]*/[^/"]*|${prefix}|g' $pcfiles
     sed -i '' 's|@@HOMEBREW_.[A-Z]*@@/[^/"]*/[^/"]*|/usr/local|g' ${bundle}/bin/{gsl,h5,nc}*
     sed -i '' 's|/opt/freetype||g' ${bundle}/lib/pkgconfig/freetype2.pc
     sed -i '' 's|Libs.private:|Libs.private: -framework CoreFoundation -framework CoreGraphics|' ${bundle}/lib/pkgconfig/cairo.pc
