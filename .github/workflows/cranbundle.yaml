@@ -5,7 +5,7 @@ name: Create and upload CRAN bundles
 
 jobs:
   Build:
-    runs-on: macos-10.15
+    runs-on: macos-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
