@@ -182,7 +182,7 @@ deploy_oldold_bundles(){
 
 merge_fat_bundles(){
   local formula=$1
-  local input1="catalina"
+  local input1="big_sur"
   local input2="arm64_big_sur"
   local output="fat_big_sur"
   local file1=$(echo archive/$input1/$formula*)

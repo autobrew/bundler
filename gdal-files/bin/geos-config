@@ -37,7 +37,7 @@ while test $# -gt 0; do
       echo ${prefix}
       ;;
     --version)
-      echo 3.10.2
+      echo 3.11.2
       ;;
     --libs)
       # TODO: make an alias for --clibs
