@@ -31,8 +31,8 @@ clang++ -arch $arch -std=c++11 /tmp/test-gdal.cpp -o test-gdal $(gdal-config --c
 # Actually run the program if possible
 localarch="$(uname -m)"
 if [ "$arch" = "x86_64" ] || [ "$localarch" = "arm64" ]; then
-echo "Running test program for ${arch} under ${localarch}"
-./test-gdal
+echo "Linking OK, now executing test program for ${arch} under ${localarch}... "
+./test-gdal && echo "Success!"
 else
 echo "Linking OK, skipping run test for $arch on $(uname -m)"
 fi

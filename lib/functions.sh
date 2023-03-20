@@ -114,12 +114,8 @@ deploy_bundle() {
 
   # Run tests if running on appropriate machine
   if [ -f "$bundle/test" ]; then
-    if [[ "$target" == "arm64"* ]]; then
-      echo "Skipping tests (testing arm64 requires MacOS 11)"
-    else
-      echo "Running test script for $package on $target"
-      "$bundle/test" "$target"
-    fi
+    echo "Running test script for $package on $target"
+    "$bundle/test" "$target"
   fi
 
   # Create archive
