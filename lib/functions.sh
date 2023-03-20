@@ -109,7 +109,7 @@ deploy_bundle() {
   # Copy MacOS system pc files
   if [ "$package" == "cranbundle" ]; then
     # TODO: maybe version this by $target instead of hardcoding big_sur (11)
-    cp -v /usr/local/Homebrew/Library/Homebrew/os/mac/pkgconfig/11/* ${bundle}/lib/pkgconfig
+    cp -v $(brew --repo)/Library/Homebrew/os/mac/pkgconfig/11/* ${bundle}/lib/pkgconfig
   fi
 
   # Run tests if running on appropriate machine
