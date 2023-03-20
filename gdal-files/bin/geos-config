@@ -1,4 +1,5 @@
 #!/bin/sh
+# Jeroen: modified from geos-config to not hardcode homebrew paths
 BINDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 prefix="$(dirname $BINDIR)"
 libdir="${prefix}/lib"
@@ -66,7 +67,7 @@ while test $# -gt 0; do
       echo ${prefix}/include
       ;;
     --jtsport)
-      echo 1.17.0
+      echo 1.18.0
       ;;
     *)
       usage 1 1>&2

@@ -108,13 +108,13 @@ deploy_bundle() {
 
   # Copy MacOS system pc files
   if [ "$package" == "cranbundle" ]; then
-    # TODO: maybe version this by $target instead of hardcoding 10.13
-    cp -v /usr/local/Homebrew/Library/Homebrew/os/mac/pkgconfig/10.13/* ${bundle}/lib/pkgconfig
+    # TODO: maybe version this by $target instead of hardcoding big_sur (11)
+    cp -v /usr/local/Homebrew/Library/Homebrew/os/mac/pkgconfig/11/* ${bundle}/lib/pkgconfig
   fi
 
   # Run tests if running on appropriate machine
   if [ -f "$bundle/test" ]; then
-    if [[ "$target" == "arm64"* ]] && [[ ${OSTYPE:6} -lt 20 ]]; then
+    if [[ "$target" == "arm64"* ]]; then
       echo "Skipping tests (testing arm64 requires MacOS 11)"
     else
       echo "Running test script for $package on $target"
