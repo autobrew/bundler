@@ -1,0 +1,3 @@
+#!/bin/sh
+#Upstream libpng-config hardcodes homebrew paths
+pkg-config libpng "$@"
