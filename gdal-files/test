@@ -29,8 +29,9 @@ echo "Trying to link with $libs"
 clang++ -arch $arch -std=c++11 /tmp/test-gdal.cpp -o test-gdal $(gdal-config --cflags) $libs
 
 # Actually run the program if possible
-if [ "$arch" = "$(uname -m)" ]; then
-echo "Running test program..."
+localarch="$(uname -m)"
+if [ "$arch" = "x86_64" ] || [ "$localarch" = "arm64" ]; then
+echo "Running test program for ${arch} under ${localarch}"
 ./test-gdal
 else
 echo "Linking OK, skipping run test for $arch on $(uname -m)"
