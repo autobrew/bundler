@@ -191,6 +191,9 @@ merge_fat_bundles(){
   local bundle=$(ls tmp)
   tar xzf $file2 -C tmp
   for statlib1 in tmp/$bundle/lib/*.a; do
+    if [ -L "$statlib1" ]; then
+      continue  # Skip symlinks
+    fi
     local statlib2="${statlib1/$input1/$input2}"
     lipo -create $statlib1 $statlib2 -output fatlib.a
     mv -fv fatlib.a $statlib1
