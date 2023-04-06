@@ -86,6 +86,9 @@ deploy_bundle() {
     fi
     rm -f $file
     echo "OK! $file"
+    if [ "$GITHUB_OUTPUT" ]; then
+      echo "VERSION=$version" >> $GITHUB_OUTPUT
+    fi
   done
   set +f
 
@@ -118,15 +121,15 @@ deploy_bundle() {
     "$bundle/test" "$target"
   fi
 
-  # Create archive
+  # Create dist
   mv "$bundle/.brew" "$bundle/brew" || true
   echo "$deptree" > $bundle/tree.txt
   echo "$bottles" > $bundle/bottles.txt
-  mkdir -p "archive/$target"
+  mkdir -p "dist"
   if [ "$target" = "x86_64_linux" ]; then
-    gtar cfz "archive/$target/$bundle.tar.gz" $bundle
+    gtar cfz "dist/$bundle.tar.gz" $bundle
   else
-    tar cfJ "archive/$target/$bundle.tar.xz" $bundle
+    tar cfJ "dist/$bundle.tar.xz" $bundle
   fi
   rm -Rf $bundle
 }
@@ -181,7 +184,7 @@ merge_universal_bundles(){
   local input1="big_sur"
   local input2="arm64_big_sur"
   local output="universal_big_sur"
-  local file1=$(echo archive/$input1/$formula*)
+  local file1=$(echo dist/*-${input1}.tar.xz)
   local file2="${file1//$input1/$input2}"
   local file3="${file1//$input1/$output}"
   #local bundle="$(basename ${file1%%.*})"
