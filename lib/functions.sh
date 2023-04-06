@@ -176,11 +176,11 @@ deploy_oldold_bundles(){
   deploy_bundle "el_capitan" "${@:1}"
 }
 
-merge_fat_bundles(){
+merge_universal_bundles(){
   local formula=$1
   local input1="big_sur"
   local input2="arm64_big_sur"
-  local output="fat_big_sur"
+  local output="universal_big_sur"
   local file1=$(echo archive/$input1/$formula*)
   local file2="${file1//$input1/$input2}"
   local file3="${file1//$input1/$output}"
