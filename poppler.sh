@@ -2,10 +2,10 @@
 source lib/functions.sh
 
 # Avoid glib dependency (from cairo)
-export deps="cairo fontconfig freetype libpng lzo pixman gettext jpeg openjpeg little-cms2 libtiff"
+export deps="cairo fontconfig freetype libpng lzo pixman gettext jpeg openjpeg little-cms2 libtiff zstd"
 export poppler_extra_files="**/share/poppler"
 export poppler_lite_extra_files="**/share/poppler"
 export package="poppler"
-deploy_oldold_bundles poppler
-deploy_old_bundles poppler
 deploy_new_bundles poppler-lite
+merge_universal_bundles poppler
+deploy_old_bundles poppler
