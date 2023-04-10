@@ -86,7 +86,7 @@ deploy_bundle() {
     fi
     rm -f $file
     echo "OK! $file"
-    if [ "$GITHUB_OUTPUT" ]; then
+    if [ "$GITHUB_OUTPUT" ] && [ "$target" = "big_sur" ]; then
       echo "VERSION=$version" >> $GITHUB_OUTPUT
     fi
   done
@@ -184,7 +184,7 @@ merge_universal_bundles(){
   local input1="big_sur"
   local input2="arm64_big_sur"
   local output="universal"
-  local file1=$(echo dist/*-${input1}.tar.xz)
+  local file1=$(echo dist/${formula}*-${input1}.tar.xz)
   local file2="${file1//$input1/$input2}"
   local file3="${file1//$input1/$output}"
   #local bundle="$(basename ${file1%%.*})"
