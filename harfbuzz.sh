@@ -6,5 +6,6 @@ source lib/functions.sh
 # We also built with glib bindings but not adding that here
 export package=harfbuzz
 export deps="cairo fontconfig freetype libpng lzo pixman fribidi"
-deploy_old_bundles harfbuzz
 deploy_new_bundles harfbuzz-lite
+merge_universal_bundles harfbuzz
+deploy_old_bundles harfbuzz
