@@ -201,14 +201,16 @@ merge_universal_bundles(){
     lipo -create $statlib1 $statlib2 -output fatlib.a
     mv -fv fatlib.a $statlib1
   done
-  for bin1 in tmp/$bundle/bin/*; do
-    if [ -L "$bin1" ]; then
-      continue  # Skip symlinks
-    fi
-    local bin2="${bin1/$input1/$input2}"
-    lipo -create $bin1 $bin2 -output fatbin
-    mv -fv fatbin $bin1
-  done
+  if [ -d "$tmp/$bundle/bin/" ]; then
+    for bin1 in tmp/$bundle/bin/*; do
+      if [ -L "$bin1" ]; then
+        continue  # Skip symlinks
+      fi
+      local bin2="${bin1/$input1/$input2}"
+      lipo -create $bin1 $bin2 -output fatbin
+      mv -fv fatbin $bin1
+    done
+  fi
   cat tmp/${bundle/$input1/$input2}/bottles.txt >> tmp/$bundle/bottles.txt
   rm -Rf tmp/*-arm64*
   local fatbundle=${bundle/$input1/$output}
