@@ -201,7 +201,7 @@ merge_universal_bundles(){
     lipo -create $statlib1 $statlib2 -output fatlib.a
     mv -fv fatlib.a $statlib1
   done
-  if [ -d "$tmp/$bundle/bin/" ]; then
+  if [ -d "tmp/$bundle/bin/" ]; then
     for bin1 in tmp/$bundle/bin/*; do
       if [ -L "$bin1" ]; then
         continue  # Skip symlinks
