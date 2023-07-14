@@ -10,7 +10,7 @@ deploy_bundle() {
   fi
 
   if [ -z ${deps+set} ]; then
-  local deps="$(brew deps $formula)"
+  local deps="$(brew deps $formula | sed 's/openssl@3/openssl-static/g')"
   fi
 
   # Print debug
