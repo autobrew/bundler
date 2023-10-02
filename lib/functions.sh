@@ -149,6 +149,7 @@ deploy_new_bundles(){
   brew update
   brew tap autobrew/cran
   jq --version || brew install jq
+  brew --version
   local targets="arm64_big_sur big_sur"
   for target in $targets
   do
