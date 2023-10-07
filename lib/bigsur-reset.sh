@@ -5,10 +5,16 @@ brew update
 # Reset homebrew-core
 cd $(brew --repo homebrew/core)
 git clean -fxd
-git reset --hard ea58a1bda7cdbc237877ed99176a29b8dfc179dc
-git branch bigsur
-git checkout bigsur
-git remote remove origin
+git remote set-url origin https://github.com/autobrew/homebrew-big-sur
+git fetch origin master
+git reset --hard origin/master
+
+#cd $(brew --repo homebrew/core)
+#git clean -fxd
+#git reset --hard ea58a1bda7cdbc237877ed99176a29b8dfc179dc
+#git branch bigsur
+#git checkout bigsur
+#git remote remove origin
 
 # brew itself
 #cd $(brew --repo)
