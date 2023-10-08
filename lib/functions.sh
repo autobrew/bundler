@@ -194,7 +194,7 @@ merge_universal_bundles(){
   tar xzf $file1 -C tmp
   local bundle=$(ls tmp)
   tar xzf $file2 -C tmp
-  for statlib1 in tmp/$bundle/lib/*.a; do
+  for statlib1 in $(find tmp/$bundle/lib -name \*.a); do
     if [ -L "$statlib1" ]; then
       continue  # Skip symlinks
     fi
