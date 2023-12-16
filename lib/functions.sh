@@ -205,7 +205,12 @@ merge_universal_bundles(){
   if [ -d "tmp/$bundle/bin/" ]; then
     for bin1 in tmp/$bundle/bin/*; do
       if [ -L "$bin1" ]; then
+        echo "$bin1 is a symlink, no need to merge"
         continue  # Skip symlinks
+      fi
+      if [ "$(file $bin1 | grep script)" ]; then
+        echo "$bin1 is a shell script, no need to merge"
+        continue  # Skip scripts
       fi
       local bin2="${bin1/$input1/$input2}"
       lipo -create $bin1 $bin2 -output fatbin
