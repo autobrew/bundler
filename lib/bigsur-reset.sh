@@ -24,6 +24,7 @@ git reset --hard origin/master
 #git checkout bigsur
 #git remote remove origin
 
+GITHUB_ENV="${GITHUB_ENV:-/dev/stderr}"
 echo "HOMEBREW_NO_GITHUB_API=1" >> "$GITHUB_ENV"
 echo "HOMEBREW_NO_INSTALL_FROM_API=1" >> "$GITHUB_ENV"
 echo "HOMEBREW_NO_AUTO_UPDATE=1" >> "$GITHUB_ENV"
