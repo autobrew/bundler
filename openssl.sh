@@ -5,4 +5,3 @@ source lib/functions.sh
 export package="openssl" 
 deploy_new_bundles "openssl-static"
 merge_universal_bundles openssl
-deploy_old_bundles "openssl@1.1"

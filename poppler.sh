@@ -8,4 +8,3 @@ export poppler_lite_extra_files="**/share/poppler"
 export package="poppler"
 deploy_new_bundles poppler-lite
 merge_universal_bundles poppler
-deploy_old_bundles poppler
