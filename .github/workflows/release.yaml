@@ -9,7 +9,7 @@ name: Release a single library bundle
 
 jobs:
   Build:
-    runs-on: macos-11
+    runs-on: macos-13
     steps:
       - name: Prepare git
         run: |
@@ -18,7 +18,7 @@ jobs:
           git config --global user.name  'Jeroen (via CI)'
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - id: reset
         name: Reset homebrew to bigsur
