@@ -20,9 +20,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - id: reset
-        name: Reset homebrew to bigsur
-        run: ./lib/bigsur-reset.sh
+#      - id: reset
+#        name: Reset homebrew to bigsur
+#        run: ./lib/bigsur-reset.sh
 
       - id: bundle
         name: Create bundles

@@ -86,7 +86,7 @@ deploy_bundle() {
     fi
     rm -f $file
     echo "OK! $file"
-    if [ "$GITHUB_OUTPUT" ] && [ "$target" = "big_sur" ]; then
+    if [ "$GITHUB_OUTPUT" ] && [ "$target" = "ventura" ]; then
       echo "VERSION=$version" >> $GITHUB_OUTPUT
     fi
   done
@@ -111,8 +111,8 @@ deploy_bundle() {
 
   # Copy MacOS system pc files
   if [ "$package" == "cranbundle" ]; then
-    # TODO: maybe version this by $target instead of hardcoding big_sur (11)
-    cp -v $(brew --repo)/Library/Homebrew/os/mac/pkgconfig/11/* ${bundle}/lib/pkgconfig
+    # TODO: maybe version this by $target instead of hardcoding ventura (13)
+    cp -v $(brew --repo)/Library/Homebrew/os/mac/pkgconfig/13/* ${bundle}/lib/pkgconfig
   fi
 
   # Run tests if running on appropriate machine
@@ -150,7 +150,7 @@ deploy_new_bundles(){
   brew tap autobrew/cran
   jq --version || brew install jq
   brew --version
-  local targets="big_sur arm64_big_sur"
+  local targets="ventura arm64_ventura"
   for target in $targets
   do
     deploy_bundle $target "${@:1}"
@@ -182,8 +182,8 @@ deploy_oldold_bundles(){
 
 merge_universal_bundles(){
   local formula=$1
-  local input1="big_sur"
-  local input2="arm64_big_sur"
+  local input1="ventura"
+  local input2="arm64_ventura"
   local output="universal"
   local file1=$(echo dist/${formula}*-${input1}.tar.xz)
   local file2="${file1//$input1/$input2}"
