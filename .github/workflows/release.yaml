@@ -26,8 +26,7 @@ jobs:
 
       - id: bundle
         name: Create bundles
-        shell: bash-wrapper {0}
-        run: bash ${{ github.event.inputs.library }}.sh
+        run: ./${{ github.event.inputs.library }}.sh
 
       - name: Release
         uses: softprops/action-gh-release@v1
