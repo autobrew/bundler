@@ -90,7 +90,7 @@ deploy_bundle() {
     fi
     rm -f $file
     echo "OK! $file"
-    if [ "$GITHUB_OUTPUT" ] && [ "$target" = "big_sur" ]; then
+    if [ "$GITHUB_OUTPUT" ] && [ "$target" = "$deployment" ]; then
       echo "VERSION=$version" >> $GITHUB_OUTPUT
     fi
   done
@@ -154,7 +154,7 @@ deploy_new_bundles(){
   brew tap autobrew/cran
   jq --version || brew install jq
   brew --version
-  local targets="big_sur arm64_$deployment"
+  local targets="$deployment arm64_$deployment"
   for target in $targets
   do
     deploy_bundle $target "${@:1}"
@@ -186,7 +186,7 @@ deploy_oldold_bundles(){
 
 merge_universal_bundles(){
   local formula=$1
-  local input1="big_sur"
+  local input1="$deployment"
   local input2="arm64_$deployment"
   local output="universal"
   local file1=$(echo dist/${formula}*-${input1}.tar.xz)
