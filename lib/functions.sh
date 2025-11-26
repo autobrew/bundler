@@ -2,7 +2,7 @@
 set -e
 
 if [ -z "$deployment" ]; then
-export deployment="ventura"
+export deployment="big_sur"
 fi
 
 deploy_bundle() {
