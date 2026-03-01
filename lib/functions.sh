@@ -2,7 +2,7 @@
 set -e
 
 if [ -z "$deployment" ]; then
-export deployment="ventura"
+export deployment="sonoma"
 fi
 
 deploy_bundle() {
@@ -188,7 +188,7 @@ merge_universal_bundles(){
   local formula=$1
   local input1="$deployment"
   local input2="arm64_$deployment"
-  local output="universal"
+  local output="$deployment-universal"
   local file1=$(echo dist/${formula}*-${input1}.tar.xz)
   local file2="${file1//$input1/$input2}"
   local file3="${file1//$input1/$output}"

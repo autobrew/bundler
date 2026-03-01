@@ -9,7 +9,7 @@ name: Release a single library bundle
 
 jobs:
   Build:
-    runs-on: macos-13
+    runs-on: macos-15
     steps:
       - name: Prepare git
         run: |
