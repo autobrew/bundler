@@ -1,6 +1,11 @@
 #!/bin/sh
 set -e
 
+# Homebrew 6 loads core formulae from the API, which only exposes the bottle
+# for the platform brew is running on. Load formulae from the local tap so
+# that 'brew info --json=v1' has bottle URLs for all target platforms.
+export HOMEBREW_NO_INSTALL_FROM_API=1
+
 if [ -z "$deployment" ]; then
 export deployment="sonoma"
 fi
@@ -139,6 +144,7 @@ deploy_bundle() {
 }
 
 deploy_linux_bundles(){
+  brew tap --force homebrew/core
   brew update
   brew tap autobrew/cran
   brew trust autobrew/cran
@@ -151,6 +157,7 @@ deploy_linux_bundles(){
 }
 
 deploy_new_bundles(){
+  brew tap --force homebrew/core
   brew update
   brew tap autobrew/cran
   brew trust autobrew/cran
