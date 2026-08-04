@@ -141,6 +141,7 @@ deploy_bundle() {
 deploy_linux_bundles(){
   brew update
   brew tap autobrew/cran
+  brew trust autobrew/cran
   jq --version || brew install jq gnu-tar
   local targets="x86_64_linux"
   for target in $targets
@@ -152,6 +153,7 @@ deploy_linux_bundles(){
 deploy_new_bundles(){
   brew update
   brew tap autobrew/cran
+  brew trust autobrew/cran
   jq --version || brew install jq
   brew --version
   local targets="$deployment arm64_$deployment"
