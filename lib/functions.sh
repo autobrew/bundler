@@ -158,7 +158,7 @@ deploy_linux_bundles(){
 
 deploy_new_bundles(){
   brew tap --force homebrew/core
-  brew update
+  brew update || true
   brew tap autobrew/cran
   brew trust autobrew/cran
   jq --version || brew install jq
