@@ -16,6 +16,7 @@ jobs:
           git config --global core.autocrlf false
           git config --global user.email '121622595+jeroen[bot]@users.noreply.github.com'
           git config --global user.name  'Jeroen (via CI)'
+          git config --global init.defaultBranch master
 
       - name: Checkout
         uses: actions/checkout@v6
@@ -29,7 +30,7 @@ jobs:
         run: ./${{ github.event.inputs.library }}.sh
 
       - name: Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ github.event.inputs.library }}-${{ steps.bundle.outputs.version }}
           files: dist/*.xz

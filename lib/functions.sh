@@ -6,6 +6,10 @@ set -e
 # that 'brew info --json=v1' has bottle URLs for all target platforms.
 export HOMEBREW_NO_INSTALL_FROM_API=1
 
+# We want the declared deps (not runtime deps of installed kegs) because we
+# bundle bottles for other targets; silence the hint about that in CI.
+export HOMEBREW_NO_ENV_HINTS=1
+
 if [ -z "$deployment" ]; then
 export deployment="sonoma"
 fi
